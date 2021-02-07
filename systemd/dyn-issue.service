@@ -1,0 +1,11 @@
+[Unit]
+Description="Dynamic /etc/issue Setter"
+Wants=getty-pre.target
+Before=getty@.service
+
+[Service]
+Type=oneshot
+ExecStart=-/usr/local/sbin/setissue
+
+[Install]
+WantedBy=getty@.service

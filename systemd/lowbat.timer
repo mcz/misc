@@ -1,0 +1,9 @@
+[Unit]
+Description=Battery Check Timer
+
+[Timer]
+OnActiveSec=1s
+OnUnitActiveSec=1m
+
+[Install]
+WantedBy=default.target

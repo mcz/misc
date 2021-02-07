@@ -1,0 +1,6 @@
+[Unit]
+Description=Battery discharge watcher
+
+[Service]
+Type=oneshot
+ExecStart=/home/samo/.local/bin/scripts/lowbat.bash
