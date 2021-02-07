@@ -1,0 +1,89 @@
+XtDefaultFont: -adobe-helvetica-medium-r-normal--14-140-100-100-p-100-iso8859-*
+XtDefaultFontSet: -adobe-helvetica-*-*-normal--14-140-100-100-p-*-iso8859-*
+
+XCalc*font: -*-inconsolata-*-*-*-*-20-*-*-*-*-*-iso8859-*
+XCalc.Rpn: on
+XCalc.Stipple: on
+XCalc*hp.bevel.screen.LCD.translations: #replace\n\
+	Ctrl<Key>c:quit()\n\
+	Ctrl<Key>h:back()\n\
+	None<Key>0:digit(0)\n\
+	None<Key>1:digit(1)\n\
+	None<Key>2:digit(2)\n\
+	None<Key>3:digit(3)\n\
+	None<Key>4:digit(4)\n\
+	None<Key>5:digit(5)\n\
+	None<Key>6:digit(6)\n\
+	None<Key>7:digit(7)\n\
+	None<Key>8:digit(8)\n\
+	None<Key>9:digit(9)\n\
+	Shift<Key>a:digit(A)\n\
+	Shift<Key>b:digit(B)\n\
+	Shift<Key>c:digit(C)\n\
+	Shift<Key>d:digit(D)\n\
+	Shift<Key>e:digit(E)\n\
+	Shift<Key>f:digit(F)\n\
+	<Key>KP_0:digit(0)\n\
+	<Key>KP_1:digit(1)\n\
+	<Key>KP_2:digit(2)\n\
+	<Key>KP_3:digit(3)\n\
+	<Key>KP_4:digit(4)\n\
+	<Key>KP_5:digit(5)\n\
+	<Key>KP_6:digit(6)\n\
+	<Key>KP_7:digit(7)\n\
+	<Key>KP_8:digit(8)\n\
+	<Key>KP_9:digit(9)\n\
+	<Key>KP_Enter:enter()\n\
+	<Key>KP_Multiply:multiply()\n\
+	<Key>KP_Add:add()\n\
+	<Key>KP_Subtract:subtract()\n\
+	<Key>KP_Decimal:decimal()\n\
+	<Key>KP_Divide:divide()\n\
+	<Key>.:decimal()\n\
+	<Key>+:add()\n\
+	<Key>-:subtract()\n\
+	<Key>*:multiply()\n\
+	<Key>/:divide()\n\
+	<Key>b:base()\n\
+	<Key>!:factorial()\n\
+	<Key>e:e()\n\
+	<Key>^:power()\n\
+	<Key>p:pi()\n\
+	<Key>i:inverse()\n\
+	<Key>s:sine()\n\
+	<Key>c:cosine()\n\
+	<Key>t:tangent()\n\
+	<Key>d:degree()\n\
+	<Key>l:naturalLog()\n\
+	<Key>n:negate()\n\
+	<Key>r:squareRoot()\n\
+	<Key>space:clear()\n\
+	<Key>q:quit()\n\
+	<Key>Delete:back()\n\
+	<Key>Return:enter()\n\
+	<Key>Linefeed:enter()\n\
+	<Key>x:XexchangeY()\n\
+	<Key>BackSpace:back()\n\
+	<Btn1Down>,<Btn1Up>:toggle()selection()\n
+
+
+Xft.antialias: true
+Xft.hinting: false
+Xft.rgba: rgb
+Xft.autohint: false
+Xft.hintstyle: hintfull
+Xft.lcdfilter: lcddefault
+
+Xmessage*customization: -color
+Xmessage*message.scrollVertical: whenNeeded
+Xmessage*baseTranslations: #override: \
+	<Key>Return: default-exit() \n\
+	<Key>1: exit(1) \n\
+	<Key>2: exit(2) \n\
+	<Key>3: exit(3) \n\
+	<Key>4: exit(4) \n\
+	<Key>5: exit(5) \n\
+	<Key>6: exit(6) \n\
+	<Key>7: exit(7) \n\
+	<Key>8: exit(8) \n\
+	<Key>9: exit(9)
