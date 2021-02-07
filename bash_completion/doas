@@ -1,0 +1,36 @@
+_doas()
+{
+	local cur prev words cword
+	_init_completion || return
+
+	local i
+
+	for ((i = 1; i <= cword; i++)); do
+		if [[ ${words[i]} != -* ]]; then
+			local PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
+			local root_command=${words[i]}
+			_command_offset $i
+			return
+		fi
+		[[ ${words[i]} == -@(u|C) ]] && ((i++))
+	done
+
+	case "$prev" in
+		-u)
+			COMPREPLY=($(compgen -u -- "$cur"))
+			return
+			;;
+		-C)
+			_filedir
+			return
+			;;
+	esac
+	
+	if [[ $cur == -* ]]; then
+		local opts=$(_parse_help "$1")
+		COMPREPLY=($(compgen -W '${opts:-$(_parse_usage "$1")}' -- "$cur"))
+		[[ ${COMPREPLY-} == *= ]] && compopt -o nospace
+		return
+	fi
+} &&
+	complete -F _doas doas
