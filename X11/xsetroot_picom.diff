@@ -1,0 +1,98 @@
+--- xsetroot.c	2018-03-10 05:22:16.000000000 +0100
++++ xsetroot_changed.c	2020-09-14 22:06:57.739145849 +0200
+@@ -57,8 +57,10 @@
+ static int reverse = 0;
+ static int save_colors = 0;
+ static int unsave_past = 0;
++static Bool retain  = 0;
+ static Pixmap save_pixmap = (Pixmap)None;
+ 
++static void RetainBG(void);
+ static void FixupState(void);
+ static void SetBackgroundToBitmap(Pixmap bitmap, 
+ 				  unsigned int width, unsigned int height);
+@@ -92,6 +94,7 @@
+             "  -solid <color>                  Set the background of the root window\n"
+             "  -name <string>                  Set the name of the root window\n"
+             "  -d,   -display <display>        Specifies the server to connect to\n"
++            "  -r, -retain                     Save Background to _XROOTPMAP_ID and ESETROOT_PMAP_ID\n"
+             );
+     exit(1);
+     /*NOTREACHED*/
+@@ -215,6 +218,10 @@
+ 	    reverse = 1;
+ 	    continue;
+ 	}
++	if (!strcmp("-r",argv[i]) || !strcmp("-retain",argv[i])) {
++	   retain = True;
++	   continue;
++	}
+ 	fprintf(stderr, "%s: unrecognized argument '%s'\n",
+ 		program_name, argv[i]);
+ 	usage(NULL);
+@@ -277,10 +284,9 @@
+   
+     /* Handle -solid option */
+     if (solid_color) {
+-	XSetWindowBackground(dpy, root, NameToPixel(solid_color,
+-						    BlackPixel(dpy, screen)));
+-	XClearWindow(dpy, root);
+-	unsave_past = 1;
++	bitmap = XCreateBitmapFromData(dpy, root, "\000", 1, 1);
++	fore_color = back_color = solid_color;
++	SetBackgroundToBitmap(bitmap, 1, 1);
+     }
+   
+     /* Handle -bitmap option */
+@@ -311,10 +317,42 @@
+     }
+   
+     FixupState();
++    if (retain)
++	RetainBG();
+     XCloseDisplay(dpy);
+     exit (0);
+ }
+ 
++static void
++RetainBG(void)
++{
++    Atom atom_root = XInternAtom(dpy, "_XROOTPMAP_ID", False);
++    Atom atom_eroot = XInternAtom(dpy, "ESETROOT_PMAP_ID", False);
++	Atom type;
++    int format;
++    unsigned long length, after;
++    unsigned char *data_root, *data_eroot;
++
++    XGetWindowProperty(dpy, root, atom_root, 0L, 1L, False, AnyPropertyType,
++	       &type, &format, &length, &after, &data_root);
++    if (type == XA_PIXMAP && data_root) {
++	XKillClient(dpy, *((Pixmap *) data_root));
++	XGetWindowProperty(dpy, root, atom_eroot, 0L, 1L, False, AnyPropertyType,
++		   &type, &format, &length, &after, &data_eroot);
++	if (type == XA_PIXMAP && data_eroot && *((Pixmap *) data_root) != *((Pixmap *) data_eroot))
++		XKillClient(dpy, *((Pixmap *) data_eroot));
++	XFree(data_eroot);
++    }
++    XFree(data_root);
++
++   if (!save_pixmap)
++	save_pixmap = XCreatePixmap(dpy, root, 1, 1, 1); // NOT REACHED
++   XChangeProperty(dpy, root, atom_root, XA_PIXMAP, 32, PropModeReplace,
++	    (unsigned char *) &save_pixmap, 1);
++   XChangeProperty(dpy, root, atom_eroot, XA_PIXMAP, 32, PropModeReplace,
++	    (unsigned char *) &save_pixmap, 1);
++   XSetCloseDownMode(dpy, RetainPermanent);
++}
+ 
+ /* Free past incarnation if needed, and retain state if needed. */
+ static void
+@@ -377,7 +415,7 @@
+     XSetWindowBackgroundPixmap(dpy, root, pix);
+     XFreeGC(dpy, gc);
+     XFreePixmap(dpy, bitmap);
+-    if (save_colors)
++    if (save_colors || retain)
+ 	save_pixmap = pix;
+     else
+ 	XFreePixmap(dpy, pix);
